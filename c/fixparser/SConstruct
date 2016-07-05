@@ -1,0 +1,4 @@
+env = Environment();
+env['CCFLAGS'] = ['-std=c99', '-g' ]
+
+env.Program('parser', ['fixparser.c', 'main.c'])

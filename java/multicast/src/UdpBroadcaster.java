@@ -11,10 +11,25 @@ public class UdpBroadcaster
     {
         try
         {
+            System.out.println("Starting");
+            System.out.flush();
+
+            System.out.println("Address.getByName()");
+            System.out.flush();
             InetAddress group = InetAddress.getByName(args[0]);
+            System.out.println("NetworkInterface.getByName()");
+            System.out.flush();
             NetworkInterface networkInterface = NetworkInterface.getByName(args[1]);
             CountDownLatch startLatch = new CountDownLatch(1);
-            Thread client = new Thread(client(startLatch, group, networkInterface));
+
+            System.out.println("MulticastSocket.new");
+            System.out.flush();
+            MulticastSocket multicastSocket = new MulticastSocket(PORT);
+            System.out.println("MulticastSocket.joinGroup");
+            System.out.flush();
+            multicastSocket.joinGroup(new InetSocketAddress(group, PORT), networkInterface);
+
+            Thread client = new Thread(client(startLatch, group, networkInterface, multicastSocket));
             client.start();
 
             if (!startLatch.await(5, TimeUnit.SECONDS))
@@ -22,7 +37,7 @@ public class UdpBroadcaster
                 throw new RuntimeException("Didn't start");
             }
 
-            Thread server = new Thread(server(group));
+            Thread server = new Thread(server(group, multicastSocket));
             server.start();
 
             client.join();
@@ -33,13 +48,17 @@ public class UdpBroadcaster
         }
     }
 
-    private static Runnable client(CountDownLatch startLatch, InetAddress group, NetworkInterface networkInterface)
+    private static Runnable client(
+        CountDownLatch startLatch, InetAddress group, NetworkInterface networkInterface,
+        final MulticastSocket multicastSocket)
     {
         return () ->
         {
-            try (MulticastSocket multicastSocket = new MulticastSocket(PORT))
+            System.out.println("client start");
+            System.out.flush();
+            try// (MulticastSocket multicastSocket = new MulticastSocket(PORT))
             {
-                multicastSocket.joinGroup(new InetSocketAddress(group, PORT), networkInterface);
+//                multicastSocket.joinGroup(new InetSocketAddress(group, PORT), networkInterface);
                 startLatch.countDown();
 
                 while (true)
@@ -66,11 +85,13 @@ public class UdpBroadcaster
         };
     }
 
-    private static Runnable server(InetAddress group)
+    private static Runnable server(InetAddress group, final MulticastSocket multicastSocket)
     {
         return () ->
         {
-            try (DatagramSocket serverSocket = new DatagramSocket())
+            System.out.println("server start");
+            System.out.flush();
+            try //(DatagramSocket serverSocket = new DatagramSocket())
             {
                 try
                 {
@@ -79,7 +100,7 @@ public class UdpBroadcaster
                         Thread.sleep(1000);
                         byte[] sendData = new byte[256];
                         DatagramPacket sendPacket = new DatagramPacket(sendData, sendData.length, group, PORT);
-                        serverSocket.send(sendPacket);
+                        multicastSocket.send(sendPacket);
                     }
                 }
                 catch (Exception e)

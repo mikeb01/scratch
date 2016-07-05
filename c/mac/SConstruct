@@ -1,0 +1,3 @@
+
+Program('processor_info76', 'processor_info76.c')
+Program('processor_info77', 'processor_info77.c')
