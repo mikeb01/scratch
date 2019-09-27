@@ -1,0 +1,8 @@
+:sourcedir: ../java
+
+= Quick check
+
+----
+include::{sourcedir}/java/files/src/com/company/Main.java
+----
+
