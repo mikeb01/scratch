@@ -1,0 +1,7 @@
+**/*.iml
+java/files/.idea/
+java/files/out
+java/.idea/
+java/opencltest/.idea/
+java/opencltest/target/
+java/risk/.idea/

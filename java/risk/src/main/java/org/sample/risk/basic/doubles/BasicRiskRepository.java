@@ -1,4 +1,4 @@
-package org.sample.basic.rounded;
+package org.sample.risk.basic.doubles;
 
 import org.sample.RiskPosition;
 import org.sample.RiskRepository;

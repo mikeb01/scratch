@@ -1,4 +1,4 @@
-package org.sample.column.rounded;
+package org.sample.risk.column.rounded;
 
 import org.sample.RiskPosition;
 

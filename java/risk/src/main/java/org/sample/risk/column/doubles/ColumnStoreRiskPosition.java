@@ -1,4 +1,4 @@
-package org.sample.column.doubles;
+package org.sample.risk.column.doubles;
 
 import org.sample.RiskPosition;
 

@@ -1,8 +1,6 @@
-package org.sample.basic.rounded;
+package org.sample.risk.basic.doubles;
 
 import org.sample.RiskPosition;
-
-import java.util.Objects;
 
 import static java.lang.Math.round;
 
@@ -12,9 +10,9 @@ public class BasicRiskPosition implements RiskPosition
     private long openQuantity = 0;
     private long cumulativeCost = 0;
     private long realisedPnL = 0;
-    private long margin;
-    private long unrealisedPnL;
-    private long valuation;
+    private double margin;
+    private double unrealisedPnL;
+    private double valuation;
 
     public BasicRiskPosition(long accountId)
     {
@@ -37,14 +35,14 @@ public class BasicRiskPosition implements RiskPosition
         valuation = unrealisedPnL - margin;
     }
 
-    private long unrealisedPnL(double notionalCost, long cumulativeCost, long realisedPnL)
+    private double unrealisedPnL(double notionalCost, long cumulativeCost, long realisedPnL)
     {
-        return round(notionalCost) - (cumulativeCost + realisedPnL);
+        return notionalCost - (cumulativeCost + realisedPnL);
     }
 
-    private long marginNotional(double notionalCost, double marginRate)
+    private double marginNotional(double notionalCost, double marginRate)
     {
-        return round(notionalCost * marginRate);
+        return notionalCost * marginRate;
     }
 
     private static double notionalCost(long quantity, double bidPrice, double askPrice)
@@ -77,7 +75,7 @@ public class BasicRiskPosition implements RiskPosition
     @Override
     public long getValuation()
     {
-        return valuation;
+        return round(valuation);
     }
 
     @Override

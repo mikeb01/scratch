@@ -31,9 +31,13 @@
 
 package org.sample;
 
-import org.openjdk.jmh.annotations.*;
-import org.sample.basic.rounded.BasicRiskRepository;
-import org.sample.column.rounded.ColumnStoreRiskRepository;
+import org.openjdk.jmh.annotations.Benchmark;
+import org.openjdk.jmh.annotations.Param;
+import org.openjdk.jmh.annotations.Scope;
+import org.openjdk.jmh.annotations.Setup;
+import org.openjdk.jmh.annotations.State;
+import org.sample.risk.basic.rounded.BasicRiskRepository;
+import org.sample.risk.column.doubles.ColumnStoreRiskRepository;
 
 import java.util.Random;
 
@@ -79,11 +83,11 @@ public class MyBenchmark
                 case COLUMN:
                     return new ColumnStoreRiskRepository(instrumentId, numPositions);
                 case COLUMN_2:
-                    return new org.sample.column.doubles.ColumnStoreRiskRepository(instrumentId, numPositions);
+                    return new org.sample.risk.column.doubles.ColumnStoreRiskRepository(instrumentId, numPositions);
                 case BASIC:
                     return new BasicRiskRepository(instrumentId, numPositions);
                 case BASIC_2:
-                    return new org.sample.basic.doubles.BasicRiskRepository(instrumentId, numPositions);
+                    return new org.sample.risk.basic.doubles.BasicRiskRepository(instrumentId, numPositions);
                 default:
                     throw new IllegalStateException();
             }
